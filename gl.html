@@ -3,26 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Gallery</title>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <title>Solitaire Gallery Component</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Solitaire Gallery Styles - Scoped to avoid conflicts */
-        .gallery-component {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;  /* Changed from center to flex-start */
-    padding: 40px 20px 20px 20px;  /* Added more top padding */
-    background: #ffffff;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        .gallery-component .gallery-trigger {
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #ffffff;
+        }
+
+        .gallery-trigger {
             position: relative;
             z-index: 1000;
             display: flex;
@@ -32,12 +42,12 @@
             transition: opacity 0.3s ease;
         }
 
-        .gallery-component .gallery-trigger.hidden {
+        .gallery-trigger.hidden {
             opacity: 0;
             pointer-events: none;
         }
 
-        .gallery-component .plus-button {
+        .plus-button {
             width: 80px;
             height: 80px;
             border-radius: 50%;
@@ -51,23 +61,23 @@
             box-shadow: 0 4px 20px rgba(10, 150, 78, 0.3);
         }
 
-        .gallery-component .plus-button:hover {
+        .plus-button:hover {
             background: #087a40;
             transform: scale(1.1);
             box-shadow: 0 6px 25px rgba(10, 150, 78, 0.4);
         }
 
-        .gallery-component .plus-button i {
+        .plus-button i {
             font-size: 24px;
             color: #ffffff;
             transition: transform 0.3s ease;
         }
 
-        .gallery-component .plus-button:hover i {
+        .plus-button:hover i {
             transform: rotate(90deg);
         }
 
-        .gallery-component .gallery-text {
+        .gallery-text {
             font-family: 'Raleway', sans-serif;
             font-size: 18px;
             color: #0a964e;
@@ -76,7 +86,7 @@
             letter-spacing: 0.5px;
         }
 
-        .gallery-component .gallery-grid {
+        .gallery-grid {
             position: absolute;
             top: 0;
             left: 0;
@@ -92,12 +102,12 @@
             background: #ffffff;
         }
 
-        .gallery-component .gallery-grid.active {
+        .gallery-grid.active {
             opacity: 1;
             visibility: visible;
         }
 
-        .gallery-component .gallery-item {
+        .gallery-item {
             position: relative;
             aspect-ratio: 2/3;
             border-radius: 6px;
@@ -109,23 +119,23 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .gallery-component .gallery-item.animated {
+        .gallery-item.animated {
             transform: translateY(0) rotate(0deg);
             opacity: 1;
         }
 
-        .gallery-component .gallery-item img {
+        .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s ease;
         }
 
-        .gallery-component .gallery-item:hover img {
+        .gallery-item:hover img {
             transform: scale(1.05);
         }
 
-        .gallery-component .gallery-item::after {
+        .gallery-item::after {
             content: '';
             position: absolute;
             top: 0;
@@ -138,11 +148,11 @@
             z-index: 1;
         }
 
-        .gallery-component .gallery-item:hover::after {
+        .gallery-item:hover::after {
             opacity: 1;
         }
 
-        .gallery-component .gallery-overlay {
+        .gallery-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -155,12 +165,12 @@
             transition: all 0.3s ease;
         }
 
-        .gallery-component .gallery-overlay.active {
+        .gallery-overlay.active {
             opacity: 1;
             visibility: visible;
         }
 
-        .gallery-component .fallback-image {
+        .fallback-image {
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, #0a964e, #087a40);
@@ -172,36 +182,36 @@
             text-align: center;
         }
 
-        /* Responsive breakpoints for gallery */
+        /* Responsive breakpoints */
         @media (max-width: 1200px) {
-            .gallery-component .gallery-grid {
+            .gallery-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
         @media (max-width: 992px) {
-            .gallery-component .gallery-grid {
+            .gallery-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
                 padding: 30px 15px;
             }
             
-            .gallery-component .plus-button {
+            .plus-button {
                 width: 70px;
                 height: 70px;
             }
             
-            .gallery-component .plus-button i {
+            .plus-button i {
                 font-size: 20px;
             }
             
-            .gallery-component .gallery-text {
+            .gallery-text {
                 font-size: 16px;
             }
         }
 
         @media (max-width: 768px) {
-            .gallery-component .gallery-grid {
+            .gallery-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
                 padding: 25px 12px;
@@ -209,78 +219,42 @@
         }
 
         @media (max-width: 480px) {
-            .gallery-component .gallery-grid {
+            .gallery-grid {
                 grid-template-columns: 1fr;
                 gap: 15px;
                 padding: 20px 10px;
             }
             
-            .gallery-component .plus-button {
+            .plus-button {
                 width: 60px;
                 height: 60px;
             }
             
-            .gallery-component .plus-button i {
+            .plus-button i {
                 font-size: 18px;
             }
             
-            .gallery-component .gallery-text {
+            .gallery-text {
                 font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader"></div>
-    </div>
-         
-    <main>
-        <header>
-            <figure class="logo" style="display:none;">
-                <img src="img/logo.png" alt="BridgeThink Logo">
-            </figure>
-                         
-            <nav class="nav-menu" id="navMenu">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="e-lab.html">E-LAB</a>
-                <a href="gallery.html" class="active">Gallery</a>
-                <a href="prototype.html">Prototype</a>
-            </nav>
-                         
-            <div class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
+    <div class="gallery-container">
+        <div class="gallery-trigger" id="galleryTrigger">
+            <div class="plus-button" id="plusButton">
+                <i class="fa fa-plus"></i>
             </div>
-        </header>
-                
-        <!-- Hero Section -->
-        <section class="about-hero" style="background: url('1752409631440.jpg') no-repeat center center/cover;">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1>Team Gallery</h1>
-                <p>Challenge Highlights: Behind The Scenes!</p>
-            </div>
-        </section>
-
-        <!-- Gallery Component -->
-        <div class="gallery-component">
-            <div class="gallery-trigger" id="galleryTrigger">
-                <div class="plus-button" id="plusButton">
-                    <i class="fa fa-plus"></i>
-                </div>
-                <div class="gallery-text">Click to unveil the gallery</div>
-            </div>
-
-            <div class="gallery-overlay" id="galleryOverlay"></div>
-
-            <div class="gallery-grid" id="galleryGrid">
-                <!-- Images will be dynamically generated -->
-            </div>
+            <div class="gallery-text">Click to unveil the gallery</div>
         </div>
-    </main>
+
+        <div class="gallery-overlay" id="galleryOverlay"></div>
+
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Images will be dynamically generated -->
+        </div>
+    </div>
 
     <script>
         class GalleryComponent {
@@ -441,6 +415,5 @@
             }
         });
     </script>
-    <script src="app.js"></script>
 </body>
 </html>

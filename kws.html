@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kajiado County Weather Alert USSD System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f9f5 0%, #e8f4ea 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .phone-container {
+            background: #0a964e;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(10, 150, 78, 0.3);
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 20px;
+            background: #087a42;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            z-index: 1;
+        }
+
+        .screen {
+            background: #ffffff;
+            color: #0a964e;
+            padding: 25px;
+            min-height: 450px;
+            font-size: 14px;
+            line-height: 1.5;
+            border-radius: 15px;
+            box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(10, 150, 78, 0.2);
+        }
+
+        .input-section {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            background: #f8fdf8;
+            border: 1px solid #0a964e;
+            color: #0a964e;
+            padding: 10px 15px;
+            font-family: 'Poppins', sans-serif;
+            flex: 1;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #087a42;
+            box-shadow: 0 0 0 2px rgba(10, 150, 78, 0.2);
+        }
+
+        button {
+            background: #0a964e;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(10, 150, 78, 0.2);
+        }
+
+        button:hover {
+            background: #087a42;
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .menu-option {
+            color: #0a964e;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            padding: 5px 0;
+            border-bottom: 1px dashed rgba(10, 150, 78, 0.2);
+            margin-bottom: 5px;
+        }
+
+        .weather-data {
+            color: #087a42;
+            font-weight: 400;
+            font-family: 'Poppins', sans-serif;
+            padding: 3px 0;
+            font-size: 13px;
+        }
+
+        .help-content {
+            color: #0a964e;
+            background: #f8fdf8;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 10px 0;
+            border-left: 3px solid #0a964e;
+        }
+
+        .header {
+            color: #0a964e;
+            text-align: center;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #0a964e, transparent);
+        }
+
+        .back-option {
+            color: #087a42;
+            margin-top: 15px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(10, 150, 78, 0.3);
+        }
+
+        .loading {
+            color: #0a964e;
+            font-weight: 600;
+            animation: blink 1s infinite;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .phone-container {
+                max-width: 100%;
+                padding: 15px;
+                margin: 0;
+                border-radius: 25px;
+            }
+
+            .screen {
+                padding: 20px;
+                min-height: 400px;
+                font-size: 13px;
+                border-radius: 12px;
+            }
+
+            .header {
+                font-size: 15px;
+                margin-bottom: 12px;
+            }
+
+            .input-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                padding: 12px 20px;
+                width: 100%;
+            }
+
+            input[type="text"] {
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .phone-container {
+                padding: 12px;
+                border-radius: 20px;
+            }
+
+            .screen {
+                padding: 15px;
+                min-height: 350px;
+                font-size: 12px;
+                line-height: 1.4;
+                border-radius: 10px;
+            }
+
+            .header {
+                font-size: 14px;
+                padding-bottom: 8px;
+                margin-bottom: 10px;
+            }
+
+            .input-section {
+                margin-top: 12px;
+                gap: 8px;
+            }
+
+            button {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+
+            input[type="text"] {
+                padding: 10px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            body {
+                padding: 5px;
+            }
+
+            .phone-container {
+                padding: 10px;
+                border-radius: 18px;
+            }
+
+            .screen {
+                padding: 12px;
+                min-height: 300px;
+                font-size: 11px;
+                border-radius: 8px;
+            }
+
+            .header {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="screen" id="screen">
+            <div class="header">USSD Service</div>
+            <div id="content">
+                Welcome to USSD Service<br><br>
+                Enter USSD code to continue:<br>
+                (Try: *123# for Weather Service)
+            </div>
+            <div class="input-section">
+                <input type="text" id="userInput" placeholder="Enter USSD code or option">
+                <button onclick="processInput()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMenu = 'initial';
+        let currentLanguage = 'en'; // 'en' for English, 'sw' for Swahili
+        let sessionData = {};
+
+        const translations = {
+            en: {
+                welcome: "Welcome to USSD Service",
+                enterCode: "Enter USSD code to continue:",
+                tryCode: "(Try: *123# for Weather Service)",
+                mainTitle: "Kajiado County Weather Alert System",
+                selectOption: "Select an option:",
+                dailyForecast: "1. Daily Forecast",
+                weeklyForecast: "2. Weekly Forecast",
+                hourlyForecast: "3. Hourly Forecast",
+                helpline: "4. Help line",
+                language: "5. Language / Lugha",
+                back: "0. Back",
+                loading: "Loading...",
+                location: "Location: Oloitoktok, Kajiado County",
+                selectLanguage: "Select Language / Chagua Lugha:",
+                english: "1. English",
+                swahili: "2. Kiswahili",
+                helpMenu: "Agricultural Help Menu",
+                weatherPattern: "1. Weather Patterns",
+                croppingCalendar: "2. Cropping Calendar",
+                pestControl: "3. Pest Control",
+                irrigation: "4. Irrigation Tips",
+                marketPrices: "5. Market Prices"
+            },
+            sw: {
+                welcome: "Karibu kwenye Huduma ya USSD",
+                enterCode: "Ingiza msimbo wa USSD kuendelea:",
+                tryCode: "(Jaribu: *123# kwa Huduma ya Hali ya Hewa)",
+                mainTitle: "Mfumo wa Tahadhari ya Hali ya Hewa - Kaunti ya Kajiado",
+                selectOption: "Chagua chaguo:",
+                dailyForecast: "1. Utabiri wa Kila Siku",
+                weeklyForecast: "2. Utabiri wa Kila Wiki",
+                hourlyForecast: "3. Utabiri wa Kila Saa",
+                helpline: "4. Msaada",
+                language: "5. Language / Lugha",
+                back: "0. Rudi",
+                loading: "Inapakia...",
+                location: "Mahali: Oloitoktok, Kaunti ya Kajiado",
+                selectLanguage: "Select Language / Chagua Lugha:",
+                english: "1. English",
+                swahili: "2. Kiswahili",
+                helpMenu: "Menyu ya Msaada wa Kilimo",
+                weatherPattern: "1. Mipangilio ya Hali ya Hewa",
+                croppingCalendar: "2. Kalenda ya Upandaji",
+                pestControl: "3. Udhibiti wa Wadudu",
+                irrigation: "4. Vidokezo vya Umwagiliaji",
+                marketPrices: "5. Bei za Sokoni"
+            }
+        };
+
+        const weatherData = {
+            daily: {
+                en: {
+                    temperature: "Temperature: 24°C - 31°C",
+                    condition: "Condition: Partly Cloudy",
+                    humidity: "Humidity: 65%",
+                    windSpeed: "Wind: 12 km/h SW",
+                    rainfall: "Rainfall: 20% chance",
+                    uvIndex: "UV Index: 8 (High)",
+                    sunrise: "Sunrise: 6:24 AM",
+                    sunset: "Sunset: 6:42 PM"
+                },
+                sw: {
+                    temperature: "Joto: 24°C - 31°C",
+                    condition: "Hali: Mawingu kidogo",
+                    humidity: "Unyevu: 65%",
+                    windSpeed: "Upepo: 12 km/h SW",
+                    rainfall: "Mvua: Uwezekano wa 20%",
+                    uvIndex: "Kiwango cha UV: 8 (Juu)",
+                    sunrise: "Jua linachomoza: 6:24 AM",
+                    sunset: "Jua linatua: 6:42 PM"
+                }
+            }
+        };
+
+        const helpContent = {
+            en: {
+                weatherPatterns: "Weather Patterns:\n• Dry season: June-October\n• Short rains: Oct-December\n• Long rains: March-May\n• Plant drought-resistant crops during dry periods",
+                croppingCalendar: "Cropping Calendar:\n• Maize: Plant in March-April\n• Beans: Plant in March & October\n• Sorghum: Plant in March-April\n• Vegetables: Year-round with irrigation",
+                pestControl: "Pest Control:\n• Use certified seeds\n• Apply organic pesticides\n• Practice crop rotation\n• Remove infected plants immediately",
+                irrigation: "Irrigation Tips:\n• Water early morning or evening\n• Use drip irrigation to save water\n• Mulch around plants\n• Check soil moisture regularly",
+                marketPrices: "Current Market Prices (KSh/kg):\n• Maize: 45-50\n• Beans: 80-90\n• Tomatoes: 60-70\n• Onions: 40-50"
+            },
+            sw: {
+                weatherPatterns: "Mipangilio ya Hali ya Hewa:\n• Kiangazi: Juni-Oktoba\n• Mvua za vuli: Okt-Desemba\n• Mvua za masika: Machi-Mei\n• Panda mazao yasiyoongoza maji wakati wa ukame",
+                croppingCalendar: "Kalenda ya Upandaji:\n• Mahindi: Panda Machi-Aprili\n• Maharagwe: Panda Machi na Oktoba\n• Mtama: Panda Machi-Aprili\n• Mboga: Mwaka mzima kwa umwagiliaji",
+                pestControl: "Udhibiti wa Wadudu:\n• Tumia mbegu zilizothibitishwa\n• Tumia dawa za wadudu za asili\n• Fanya mizunguko ya mazao\n• Ondoa mimea iliyoambukizwa haraka",
+                irrigation: "Vidokezo vya Umwagiliaji:\n• Mwagilie asubuhi mapema au jioni\n• Tumia umwagiliaji wa matone\n• Fumba ardhi karibu na mimea\n• Angalia unyevu wa udongo kila wakati",
+                marketPrices: "Bei za Sasa za Sokoni (KSh/kg):\n• Mahindi: 45-50\n• Maharagwe: 80-90\n• Nyanya: 60-70\n• Vitunguu: 40-50"
+            }
+        };
+
+        function displayContent(content) {
+            document.getElementById('content').innerHTML = content;
+        }
+
+        function showLoading() {
+            displayContent(`<div class="loading">${translations[currentLanguage].loading}</div>`);
+            setTimeout(() => {
+                processCurrentMenu();
+            }, 1500);
+        }
+
+        function processInput() {
+            const input = document.getElementById('userInput').value.trim();
+            document.getElementById('userInput').value = '';
+
+            if (!input) return;
+
+            if (currentMenu === 'initial') {
+                if (input === '*123#') {
+                    currentMenu = 'language';
+                    showLoading();
+                } else {
+                    displayContent(`Invalid USSD code: ${input}<br><br>${translations[currentLanguage].enterCode}<br>${translations[currentLanguage].tryCode}`);
+                }
+                return;
+            }
+
+            processMenuSelection(input);
+        }
+
+        function processMenuSelection(input) {
+            switch (currentMenu) {
+                case 'language':
+                    if (input === '1') {
+                        currentLanguage = 'en';
+                        currentMenu = 'main';
+                        showLoading();
+                    } else if (input === '2') {
+                        currentLanguage = 'sw';
+                        currentMenu = 'main';
+                        showLoading();
+                    } else {
+                        displayLanguageMenu();
+                    }
+                    break;
+
+                case 'main':
+                    switch (input) {
+                        case '1':
+                            currentMenu = 'daily';
+                            showLoading();
+                            break;
+                        case '2':
+                            currentMenu = 'weekly';
+                            showLoading();
+                            break;
+                        case '3':
+                            currentMenu = 'hourly';
+                            showLoading();
+                            break;
+                        case '4':
+                            currentMenu = 'help';
+                            showLoading();
+                            break;
+                        case '5':
+                            currentMenu = 'language';
+                            showLoading();
+                            break;
+                        case '0':
+                            currentMenu = 'initial';
+                            processCurrentMenu();
+                            break;
+                        default:
+                            displayMainMenu();
+                    }
+                    break;
+
+                case 'help':
+                    switch (input) {
+                        case '1':
+                            displayHelpContent('weatherPatterns');
+                            break;
+                        case '2':
+                            displayHelpContent('croppingCalendar');
+                            break;
+                        case '3':
+                            displayHelpContent('pestControl');
+                            break;
+                        case '4':
+                            displayHelpContent('irrigation');
+                            break;
+                        case '5':
+                            displayHelpContent('marketPrices');
+                            break;
+                        case '0':
+                            currentMenu = 'main';
+                            processCurrentMenu();
+                            break;
+                        default:
+                            displayHelpMenu();
+                    }
+                    break;
+
+                case 'daily':
+                case 'weekly':
+                case 'hourly':
+                    if (input === '0') {
+                        currentMenu = 'main';
+                        processCurrentMenu();
+                    } else {
+                        processCurrentMenu();
+                    }
+                    break;
+
+                default:
+                    displayMainMenu();
+            }
+        }
+
+        function processCurrentMenu() {
+            switch (currentMenu) {
+                case 'initial':
+                    displayContent(`${translations[currentLanguage].welcome}<br><br>${translations[currentLanguage].enterCode}<br>${translations[currentLanguage].tryCode}`);
+                    break;
+                case 'language':
+                    displayLanguageMenu();
+                    break;
+                case 'main':
+                    displayMainMenu();
+                    break;
+                case 'daily':
+                    displayDailyForecast();
+                    break;
+                case 'weekly':
+                    displayWeeklyForecast();
+                    break;
+                case 'hourly':
+                    displayHourlyForecast();
+                    break;
+                case 'help':
+                    displayHelpMenu();
+                    break;
+            }
+        }
+
+        function displayLanguageMenu() {
+            const content = `
+                <div class="header">${translations[currentLanguage].selectLanguage}</div>
+                <div class="menu-option">${translations[currentLanguage].english}</div>
+                <div class="menu-option">${translations[currentLanguage].swahili}</div>
+            `;
+            displayContent(content);
+        }
+
+        function displayMainMenu() {
+            const content = `
+                <div class="header">${translations[currentLanguage].mainTitle}</div>
+                <div class="weather-data">${translations[currentLanguage].location}</div><br>
+                ${translations[currentLanguage].selectOption}<br><br>
+                <div class="menu-option">${translations[currentLanguage].dailyForecast}</div>
+                <div class="menu-option">${translations[currentLanguage].weeklyForecast}</div>
+                <div class="menu-option">${translations[currentLanguage].hourlyForecast}</div>
+                <div class="menu-option">${translations[currentLanguage].helpline}</div>
+                <div class="menu-option">${translations[currentLanguage].language}</div>
+                <div class="back-option">${translations[currentLanguage].back}</div>
+            `;
+            displayContent(content);
+        }
+
+        function displayDailyForecast() {
+            const weather = weatherData.daily[currentLanguage];
+            const content = `
+                <div class="header">${currentLanguage === 'en' ? 'Daily Weather Forecast' : 'Utabiri wa Hali ya Hewa ya Leo'}</div>
+                <div class="weather-data">${translations[currentLanguage].location}</div>
+                <div class="weather-data">${currentLanguage === 'en' ? 'Date: ' + new Date().toLocaleDateString() : 'Tarehe: ' + new Date().toLocaleDateString()}</div><br>
+                <div class="weather-data">${weather.temperature}</div>
+                <div class="weather-data">${weather.condition}</div>
+                <div class="weather-data">${weather.humidity}</div>
+                <div class="weather-data">${weather.windSpeed}</div>
+                <div class="weather-data">${weather.rainfall}</div>
+                <div class="weather-data">${weather.uvIndex}</div>
+                <div class="weather-data">${weather.sunrise}</div>
+                <div class="weather-data">${weather.sunset}</div>
+                <div class="back-option">${translations[currentLanguage].back}</div>
+            `;
+            displayContent(content);
+        }
+
+        function displayWeeklyForecast() {
+            const days = currentLanguage === 'en' ? 
+                ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] :
+                ['Jumatatu', 'Jumanne', 'Jumatano', 'Alhamisi', 'Ijumaa', 'Jumamosi', 'Jumapili'];
+            
+            let content = `<div class="header">${currentLanguage === 'en' ? 'Weekly Weather Forecast' : 'Utabiri wa Wiki'}</div>
+                          <div class="weather-data">${translations[currentLanguage].location}</div><br>`;
+            
+            days.forEach((day, index) => {
+                const temp = 24 + Math.floor(Math.random() * 8);
+                const maxTemp = temp + Math.floor(Math.random() * 7);
+                content += `<div class="weather-data">${day}: ${temp}°C - ${maxTemp}°C</div>`;
+            });
+            
+            content += `<div class="back-option">${translations[currentLanguage].back}</div>`;
+            displayContent(content);
+        }
+
+        function displayHourlyForecast() {
+            let content = `<div class="header">${currentLanguage === 'en' ? 'Hourly Weather Forecast' : 'Utabiri wa Kila Saa'}</div>
+                          <div class="weather-data">${translations[currentLanguage].location}</div><br>`;
+            
+            for (let i = 6; i <= 20; i += 2) {
+                const temp = 20 + Math.floor(Math.random() * 15);
+                const hour = i > 12 ? `${i-12}:00 PM` : `${i}:00 AM`;
+                content += `<div class="weather-data">${hour}: ${temp}°C</div>`;
+            }
+            
+            content += `<div class="back-option">${translations[currentLanguage].back}</div>`;
+            displayContent(content);
+        }
+
+        function displayHelpMenu() {
+            const content = `
+                <div class="header">${translations[currentLanguage].helpMenu}</div>
+                <div class="menu-option">${translations[currentLanguage].weatherPattern}</div>
+                <div class="menu-option">${translations[currentLanguage].croppingCalendar}</div>
+                <div class="menu-option">${translations[currentLanguage].pestControl}</div>
+                <div class="menu-option">${translations[currentLanguage].irrigation}</div>
+                <div class="menu-option">${translations[currentLanguage].marketPrices}</div>
+                <div class="back-option">${translations[currentLanguage].back}</div>
+            `;
+            displayContent(content);
+        }
+
+        function displayHelpContent(topic) {
+            const content = `
+                <div class="header">${currentLanguage === 'en' ? 'Agricultural Help' : 'Msaada wa Kilimo'}</div>
+                <div class="help-content">${helpContent[currentLanguage][topic]}</div>
+                <div class="back-option">${translations[currentLanguage].back}</div>
+            `;
+            displayContent(content);
+        }
+
+        // Handle Enter key
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processInput();
+            }
+        });
+
+        // Initialize the application
+        processCurrentMenu();
+    </script>
+</body>
+</html>

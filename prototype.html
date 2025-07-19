@@ -5,8 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | BridgeThink</title>
     <link rel="stylesheet" href="style.css">
-        <!-- Updated Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Raleway:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Prototype Section Styles */
+        .prototype-section {
+            padding: 50px 20px;
+            background-color: #f9f9f9;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .prototype-container {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        
+        .prototype-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .prototype-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .prototype-header h2 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .prototype-header p {
+            font-family: 'Poppins', sans-serif;
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+        
+        .prototype-content {
+            font-size: 0.90rem;
+            line-height: 1.7;
+            color: #555;
+            text-align: justify;
+        }
+        
+        .prototype-content p {
+            margin-bottom: 15px;
+        }
+        
+        .prototype-content ul {
+            margin-left: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .prototype-content li {
+            margin-bottom: 8px;
+        }
+        
+        .prototype-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        
+        .prototype-link {
+            padding: 10px 20px;
+            background: #0a964e;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .prototype-link:hover {
+            background: #087a42;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 150, 78, 0.25);
+        }
+        
+        @media (max-width: 768px) {
+            .prototype-card {
+                padding: 25px 18px;
+            }
+            
+            .prototype-header h2 {
+                font-size: 1.6rem;
+            }
+            
+            .prototype-header p {
+                font-size: 0.95rem;
+            }
+            
+            .prototype-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .prototype-link {
+                width: 100%;
+                justify-content: center;
+                padding: 10px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="loading-overlay" id="loadingOverlay">
@@ -14,36 +135,75 @@
     </div>
     
     <main>
-         <header>
-    <div class="brand-logo">
-        <a href="index.html">Brithx</a>
-    </div>
-    
-    <nav class="nav-menu" id="navMenu">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="e-lab.html">E-LAB</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="prototype.html"  class="active">Prototype</a>
-    </nav>
-    
-    <div class="menu-toggle" id="menuToggle">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-</header>
+        <header>
+            <div class="brand-logo">
+                <a href="index.html">Brithx</a>
+            </div>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="e-lab.html">E-LAB</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="prototype.html" class="active">Prototype</a>
+            </nav>
+            
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
         <!-- Hero Section -->
-        <section class="about-hero" style="background: url('1752409631440.jpg') no-repeat center center/cover;">
+        <section class="about-hero" style="background: url('proto.jpg') no-repeat center center/cover;">
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <h1>Our Prototype</h1>
-                <p>Challenge Highlights: Behind The Scenes!</p>
+                <p>The Minimum Valuable Product!</p>
             </div>
         </section>
-</main>
-<script src="app.js"></script>
-<footer class="footer">
+        
+        <!-- Prototype Information Section -->
+        <section class="prototype-section">
+            <div class="prototype-container">
+                <div class="prototype-card">
+                    <div class="prototype-header">
+                        <h2>Prototype Information</h2>
+                        <p>Explore the details of our innovative solution and see how we're addressing the challenge</p>
+                    </div>
+                    
+                    <div class="prototype-content">
+                        <p>Our prototype represents a significant step forward in addressing the challenge of weather information accessibility for farmers in Kajiado County. Developed through rigorous research and user testing, this solution combines USSD technology with agricultural expertise to deliver timely, localized weather data.</p>
+                        
+                        <p>The system features:</p>
+                        <ul>
+                            <li>Multi-language support (English and Swahili) for broader accessibility</li>
+                            <li>Daily, weekly, and hourly weather forecasts tailored for agricultural needs</li>
+                            <li>Integrated agricultural advisory services including cropping calendars and pest control</li>
+                            <li>Low-bandwidth optimized for rural connectivity</li>
+                            <li>User-friendly interface designed for feature phones</li>
+                        </ul>
+                        
+                        <p>This prototype was developed as part of our E-LAB challenge, incorporating feedback from local farmers and agricultural experts to ensure relevance and usability in real-world conditions.</p>
+                    </div>
+                    
+                    <div class="prototype-links">
+                        <a href="https://ussd-code-prototype.mgx.world/" class="prototype-link">
+                            <i class="fas fa-images"></i> Prototype Visuals
+                        </a>
+                        <a href="kws.html" class="prototype-link">
+                            <i class="fas fa-play-circle"></i> Prototype Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+
+    <footer class="footer">
         <div class="footer-container">
             <div class="footer-content">
                 <!-- Brand and School Info -->
@@ -94,7 +254,7 @@
                     </div>
                 </div>
 
-                <!-- Additional Space or Contact Info -->
+                <!-- Contact Info -->
                 <div class="footer-section">
                     <h3>Contact</h3>
                     <div class="footer-links">

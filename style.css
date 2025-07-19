@@ -1333,6 +1333,10 @@
   margin-bottom: 15px;
 }
 
+.profile-content .social-icons {
+    margin-left: -10px;
+}
+
 .profile-description {
   color: #555;
   font-family: 'Poppins', sans-serif;
